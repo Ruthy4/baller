@@ -35,7 +35,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTextBooksAndJournalsApi(client: OkHttpClient): FootballAPI {
+    fun provideFootballFixturesApi(client: OkHttpClient): FootballAPI {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
@@ -46,7 +46,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTextbooksAndJournalsDatabase(app: Application): FootballFixturesDatabase {
+    fun provideFootballFixturesDatabase(app: Application): FootballFixturesDatabase {
         return Room.databaseBuilder(
             app,
             FootballFixturesDatabase::class.java,
@@ -56,7 +56,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(dao: FootballFixturesDao, api: FootballAPI): FootballFixturesRepository {
+    fun provideFootballFixturesRepository(dao: FootballFixturesDao, api: FootballAPI): FootballFixturesRepository {
         return FootballFixturesRepositoryImpl(dao, api)
+    }
+
+    @Singleton
+    @Provides
+    fun providesFootballFixturesDao(database: FootballFixturesDatabase): FootballFixturesDao {
+        return database.footballFixturesDao
     }
 }

@@ -6,4 +6,5 @@ import com.example.footballfixtures.data.remote.dto.Competition
 
 @Database(entities = [Competition::class], version = 1, exportSchema = false)
 abstract class FootballFixturesDatabase: RoomDatabase() {
+    abstract val footballFixturesDao: FootballFixturesDao
 }

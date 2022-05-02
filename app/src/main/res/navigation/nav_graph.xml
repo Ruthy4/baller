@@ -6,6 +6,16 @@
     app:startDestination="@id/competitionsFragment">
 
     <fragment
+        android:id="@+id/competitionsFragment"
+        android:name="com.example.footballfixtures.presentation.ui.competitions.CompetitionsFragment"
+        android:label="Competitions"
+        tools:layout="@layout/fragment_competitions">
+        <action
+            android:id="@+id/action_competitionsFragment_to_competitionDetailsFragment"
+            app:destination="@id/competitionDetailsFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.footballfixtures.presentation.ui.FirstFragment"
         android:label="@string/first_fragment_label"
@@ -26,8 +36,13 @@
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
-        android:id="@+id/competitionsFragment"
-        android:name="com.example.footballfixtures.presentation.ui.competitions.CompetitionsFragment"
-        android:label="fragment_competitions"
-        tools:layout="@layout/fragment_competitions" />
+        android:id="@+id/competitionDetailsFragment"
+        android:name="com.example.footballfixtures.presentation.ui.competitions.CompetitionDetailsFragment"
+        android:label="fragment_competition_details"
+        tools:layout="@layout/fragment_competition_details" >
+        <argument
+            android:name="competition"
+            app:argType="com.example.footballfixtures.data.remote.dto.Competition" />
+    </fragment>
+
 </navigation>
