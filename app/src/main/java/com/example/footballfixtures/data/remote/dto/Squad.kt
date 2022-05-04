@@ -11,3 +11,8 @@ data class Squad(
     @SerializedName("position") val position: String?,
     @SerializedName("teamId") var teamId: Int?
 )
+
+data class SquadResponse(
+    @SerializedName("id") val id: Int,
+    @SerializedName("squad") val squad: List<Squad>?
+)

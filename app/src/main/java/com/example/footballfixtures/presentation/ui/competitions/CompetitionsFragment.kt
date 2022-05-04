@@ -1,17 +1,19 @@
 package com.example.footballfixtures.presentation.ui.competitions
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.example.footballfixtures.R
 import com.example.footballfixtures.data.remote.dto.Competition
 import com.example.footballfixtures.databinding.FragmentCompetitionsBinding
+import com.example.footballfixtures.presentation.ui.competitions.competitiondetail.CompetitionsDetailActivity
+import com.example.footballfixtures.presentation.ui.competitions.table.TableViewModel
 import com.example.footballfixtures.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,8 +39,10 @@ class CompetitionsFragment : Fragment() {
         viewModel.getCompetitions()
 
         competitionsRVAdapter = CompetitionsRVAdapter { competition ->
-            val action = CompetitionsFragmentDirections.actionCompetitionsFragmentToCompetitionDetailsFragment(competition)
-            findNavController().navigate(action)
+            val intent = Intent(requireContext(), CompetitionsDetailActivity::class.java)
+            intent.putExtra("competitionId", competition.id)
+            intent.putExtra("competitionName", competition.name)
+            startActivity(intent)
         }
 
 
@@ -46,20 +50,29 @@ class CompetitionsFragment : Fragment() {
 
             when(it) {
                 is Resource.Success -> {
+                    binding.progress.visibility = View.GONE
                     val competitionsList: List<Competition>? = it.value.competitions
+                    viewModel.saveCompetitionToDatabase(it.value.competitions)
                     val competitionRv = binding.competitionsRv
                     competitionRv.adapter = competitionsRVAdapter
                     competitionsRVAdapter.submitList(competitionsList)
                 }
 
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(), "An Error occured", Toast.LENGTH_SHORT).show()
+                    binding.progress.visibility = View.GONE
+                    Toast.makeText(requireContext(), "An Error occured, Swipe to refresh", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Im INNNNN", Toast.LENGTH_SHORT).show()
+                    binding.progress.visibility = View.VISIBLE
                 }
             }
+        }
+
+        // implement swipe to refresh
+        binding.competitionFragmentSwipeRefreshLayout.setOnRefreshListener {
+            viewModel.getCompetitions()
+            binding.competitionFragmentSwipeRefreshLayout.isRefreshing = false
         }
     }
 

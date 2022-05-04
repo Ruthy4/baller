@@ -19,17 +19,9 @@ data class Table(
     @SerializedName("goalsFor") val goalsFor: Int?,
     @SerializedName("goalsAgainst") val goalsAgainst: Int?,
     @SerializedName("goalDifference") val goalDifference: Int?
-) {
-    companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<Table>() {
-            override fun areItemsTheSame(oldItem: Table, newItem: Table): Boolean {
-                return newItem.position == oldItem.position
-            }
+)
 
-            override fun areContentsTheSame(oldItem: Table, newItem: Table): Boolean {
-                return newItem == oldItem
-            }
-
-        }
-    }
-}
+data class TableResponse(
+    @SerializedName("competition") val competition: Competition,
+    @SerializedName("standings") val standings: List<Standings>?
+)

@@ -13,3 +13,8 @@ data class Team(
     @SerializedName("shortName") val shortName: String?,
     @SerializedName("tla") val tla: String?
 )
+
+data class TeamResponse(
+    @SerializedName("competition") val competition: Competition?,
+    @SerializedName("teams") val teams: List<Team>?
+)

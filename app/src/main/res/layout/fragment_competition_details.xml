@@ -15,8 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIconTint="@color/black"
-        app:tabIndicatorColor="@color/purple_700"
-        app:tabSelectedTextColor="@color/purple_700"
+        app:tabIndicatorColor="@color/burnt_orange"
+        app:tabSelectedTextColor="@color/burnt_orange"
         app:tabTextColor="@color/black" />
 
     <androidx.viewpager2.widget.ViewPager2

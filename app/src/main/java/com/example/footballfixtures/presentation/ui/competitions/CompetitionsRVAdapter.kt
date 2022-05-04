@@ -19,7 +19,7 @@ class CompetitionsRVAdapter(private val onItemClick: (Competition) -> Unit) :
         fun bind(competition: Competition) {
             binding.apply {
                 tvName.text = competition.name
-                binding.competitionRootLayout.setOnClickListener {
+                competitionRootLayout.setOnClickListener {
                     onItemClick.invoke(competition)
                 }
             }

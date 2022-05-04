@@ -1,4 +1,4 @@
-package com.example.footballfixtures
+package com.example.footballfixtures.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.footballfixtures.R
 import com.example.footballfixtures.databinding.ActivityMainBinding
 import com.example.footballfixtures.presentation.ui.competitions.CompetitionsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -34,8 +35,6 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-
-        viewModel.getCompetitions()
     }
 
     override fun onSupportNavigateUp(): Boolean {

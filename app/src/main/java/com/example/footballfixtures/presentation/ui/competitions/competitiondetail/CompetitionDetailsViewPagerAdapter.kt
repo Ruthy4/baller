@@ -1,4 +1,4 @@
-package com.example.footballfixtures.presentation.ui.competitions
+package com.example.footballfixtures.presentation.ui.competitions.competitiondetail
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

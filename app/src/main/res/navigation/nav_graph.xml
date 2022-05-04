@@ -14,27 +14,6 @@
             android:id="@+id/action_competitionsFragment_to_competitionDetailsFragment"
             app:destination="@id/competitionDetailsFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.footballfixtures.presentation.ui.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.footballfixtures.presentation.ui.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
     <fragment
         android:id="@+id/competitionDetailsFragment"
         android:name="com.example.footballfixtures.presentation.ui.competitions.CompetitionDetailsFragment"
@@ -43,6 +22,29 @@
         <argument
             android:name="competition"
             app:argType="com.example.footballfixtures.data.remote.dto.Competition" />
+    </fragment>
+    <fragment
+        android:id="@+id/tableFragment"
+        android:name="com.example.footballfixtures.presentation.ui.competitions.table.TableFragment"
+        android:label="fragment_table"
+        tools:layout="@layout/fragment_table" >
+        <argument
+            android:name="competition"
+            app:argType="com.example.footballfixtures.data.remote.dto.Competition" />
+    </fragment>
+    <fragment
+        android:id="@+id/squadFragment"
+        android:name="com.example.footballfixtures.presentation.ui.competitions.team.squad.SquadFragment"
+        android:label="fragment_squad"
+        tools:layout="@layout/fragment_squad" />
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="com.example.footballfixtures.presentation.ui.competitions.team.TeamFragment"
+        android:label="TeamFragment"
+        tools:layout="@layout/fragment_team">
+        <action
+            android:id="@+id/action_teamFragment_to_squadFragment"
+            app:destination="@id/squadFragment" />
     </fragment>
 
 </navigation>

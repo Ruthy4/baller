@@ -3,14 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_competitions_detail.xml" value="0.218562874251497" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/activity_squad.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/competition_rv_item.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.2953125" />
-        <entry key="app/src/main/res/layout/fragment_competition_details.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/fixtures_rv_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_competition_details.xml" value="0.218562874251497" />
         <entry key="app/src/main/res/layout/fragment_competitions.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/fragment_fixtures.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/fragment_squad.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_table.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/fragment_team.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/layout/squad_rv_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/tables_rv_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/team_rv_item.xml" value="0.3098958333333333" />
       </map>
     </option>
   </component>

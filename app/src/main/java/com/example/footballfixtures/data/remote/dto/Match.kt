@@ -19,5 +19,6 @@ data class Match(
     @SerializedName("awayTeam") val awayTeam: Team?,
     @SerializedName("referees") val referees: List<Referee>?,
     val date: Date? = DateTimeUtils.toDate(utcDate)
-) {
-}
+)
+
+data class FixturesResponse(@SerializedName("matches") val matches: List<Match>)
