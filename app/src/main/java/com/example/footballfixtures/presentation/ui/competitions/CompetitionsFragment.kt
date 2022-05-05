@@ -36,8 +36,11 @@ class CompetitionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getCompetitionsListFromDatabase()
         viewModel.getCompetitions()
 
+
+        //navigate to detail activity onClick of recycler view item
         competitionsRVAdapter = CompetitionsRVAdapter { competition ->
             val intent = Intent(requireContext(), CompetitionsDetailActivity::class.java)
             intent.putExtra("competitionId", competition.id)
@@ -45,14 +48,48 @@ class CompetitionsFragment : Fragment() {
             startActivity(intent)
         }
 
+        saveCompetitionsToDatabase()
+        getSavedCompetitionsFromDatabase()
 
+        // implement swipe to refresh
+        binding.competitionFragmentSwipeRefreshLayout.setOnRefreshListener {
+            viewModel.getCompetitions()
+            binding.competitionFragmentSwipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+
+    private fun saveCompetitionsToDatabase() {
+        //observe livedata to get list of competitions
         viewModel.competitions.observe(viewLifecycleOwner) {
-
-            when(it) {
+            when (it) {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
-                    val competitionsList: List<Competition>? = it.value.competitions
                     viewModel.saveCompetitionToDatabase(it.value.competitions)
+                }
+
+                is Resource.Error -> {
+                    binding.progress.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        "An Error occured, Swipe to refresh",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is Resource.Loading -> {
+                    binding.progress.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun getSavedCompetitionsFromDatabase() {
+        viewModel.savedCompetitions.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progress.visibility = View.GONE
+                    val competitionsList: List<Competition> = it.value
                     val competitionRv = binding.competitionsRv
                     competitionRv.adapter = competitionsRVAdapter
                     competitionsRVAdapter.submitList(competitionsList)
@@ -60,7 +97,11 @@ class CompetitionsFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "An Error occured, Swipe to refresh", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "An Error occured, Swipe to refresh",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 is Resource.Loading -> {
@@ -69,11 +110,6 @@ class CompetitionsFragment : Fragment() {
             }
         }
 
-        // implement swipe to refresh
-        binding.competitionFragmentSwipeRefreshLayout.setOnRefreshListener {
-            viewModel.getCompetitions()
-            binding.competitionFragmentSwipeRefreshLayout.isRefreshing = false
-        }
     }
 
     override fun onDestroyView() {

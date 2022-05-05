@@ -1,18 +1,26 @@
 package com.example.footballfixtures.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.footballfixtures.data.FootballAPI
 import com.example.footballfixtures.data.local.FootballFixturesDao
 import com.example.footballfixtures.data.remote.dto.*
 import com.example.footballfixtures.domain.repository.FootballFixturesRepository
 import com.example.footballfixtures.utils.Resource
 import com.example.footballfixtures.utils.apiCall
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class FootballFixturesRepositoryImpl @Inject constructor(val dao: FootballFixturesDao, private val api: FootballAPI): FootballFixturesRepository {
+class FootballFixturesRepositoryImpl @Inject constructor(
+    val dao: FootballFixturesDao,
+    private val api: FootballAPI
+) : FootballFixturesRepository {
+
+
     override suspend fun getAllCompetitions(): Resource<CompetitionResponse> {
         return apiCall { api.getAllCompetitions() }
     }
+
 
     override suspend fun getTableForCompetition(competitionId: Int?): Resource<TableResponse> {
         return apiCall { api.getTableForCompetition(competitionId) }
@@ -32,6 +40,66 @@ class FootballFixturesRepositoryImpl @Inject constructor(val dao: FootballFixtur
 
     override suspend fun saveCompetitions(competition: List<Competition>?) {
         dao.saveCompetitions(competition)
+    }
+
+    override suspend fun getCompetitionsListFromDatabase(): Flow<Resource<List<Competition>>> {
+        return flow {
+            dao.getCompetitionsListFromDatabase().collect {
+                emit(Resource.Success(it))
+            }
+        }
+    }
+
+    override suspend fun deleteAllCompetitions() {
+        dao.deleteCompetition()
+    }
+
+    override suspend fun saveCompetitionTable(table: List<Table>?) {
+        dao.saveCompetitionTable(table)
+    }
+
+    override suspend fun getTableListFromDatabase(): Flow<Resource<List<Table>>> {
+        return flow {
+            dao.getTableListFromDatabase().collect {
+                emit(Resource.Success(it))
+            }
+        }
+    }
+
+    override suspend fun saveTeam(team: List<Team>?) {
+        dao.saveTeam(team)
+    }
+
+    override suspend fun getTeamListFromDatabase(): Flow<Resource<List<Team>>> {
+        return flow {
+            dao.getTeamListFromDatabase().collect {
+                emit(Resource.Success(it))
+            }
+        }
+    }
+
+    override suspend fun saveFixtures(matches: List<Match>?) {
+        dao.saveFixtures(matches)
+    }
+
+    override suspend fun getFixturesListFromDatabase(): Flow<Resource<List<Match>>> {
+        return flow {
+            dao.getFixturesListFromDatabase().collect {
+                emit(Resource.Success(it))
+            }
+        }
+    }
+
+    override suspend fun saveTeamsSquad(squad: List<Squad>?) {
+        dao.saveTeamsSquad(squad)
+    }
+
+    override suspend fun getTeamsSquadFromDatabase(): Flow<Resource<List<Squad>>> {
+        return flow {
+            dao.getTeamsSquadListFromDatabase().collect {
+                emit(Resource.Success(it))
+            }
+        }
     }
 
 }

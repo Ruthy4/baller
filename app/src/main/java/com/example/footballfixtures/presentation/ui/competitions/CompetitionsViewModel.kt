@@ -1,15 +1,13 @@
 package com.example.footballfixtures.presentation.ui.competitions
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.footballfixtures.data.remote.dto.Competition
 import com.example.footballfixtures.data.remote.dto.CompetitionResponse
 import com.example.footballfixtures.domain.repository.FootballFixturesRepository
 import com.example.footballfixtures.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +17,10 @@ class CompetitionsViewModel @Inject constructor(private val repository: Football
 
     private var _competitions = MutableLiveData<Resource<CompetitionResponse>>()
     val competitions: LiveData<Resource<CompetitionResponse>> get() = _competitions
+
+    private var _savedCompetitions = MutableLiveData<Resource<List<Competition>>>()
+    val savedCompetitions: LiveData<Resource<List<Competition>>> get() = _savedCompetitions
+
 
     fun getCompetitions() {
         _competitions.value = Resource.Loading(null, "Loading....")
@@ -40,6 +42,14 @@ class CompetitionsViewModel @Inject constructor(private val repository: Football
                 e.message
             }
         }
+    }
 
+    fun getCompetitionsListFromDatabase() {
+        _savedCompetitions.value = Resource.Loading(null, "Loading....")
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getCompetitionsListFromDatabase().collect {
+                _savedCompetitions.postValue(it)
+            }
+        }
     }
 }

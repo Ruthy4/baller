@@ -24,7 +24,7 @@ class TableFragment : Fragment() {
     private var _binding: FragmentTableBinding? = null
     private val binding get() = _binding!!
     private val tableViewModel: TableViewModel by viewModels()
-    lateinit var tablesRVAdapter: TablesRVAdapter
+    private lateinit var tablesRVAdapter: TablesRVAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +41,10 @@ class TableFragment : Fragment() {
         val intent = activity?.intent
         val competitionId = intent?.getIntExtra("competitionId", 0)
 
-        tableViewModel.getCompetitionTables(competitionId)
+        tableViewModel.getTableListFromDatabase()
+
         tablesRVAdapter = TablesRVAdapter()
+        observeTableFromDatabase()
         observeTableResponse()
 
         // implement swipe to refresh
@@ -58,7 +60,26 @@ class TableFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
-                    val tablesList: List<Table>? = it.value.standings?.get(0)?.table
+                    tableViewModel.saveCompetitionTable(it.value.standings?.get(0)?.table)
+                }
+
+                is Resource.Error -> {
+                    binding.progress.visibility = View.GONE
+                    Toast.makeText(requireContext(), "An Error occurred, Swipe to refresh", Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Loading -> {
+                    binding.progress.visibility = View.VISIBLE                }
+            }
+        }
+    }
+
+    private fun observeTableFromDatabase() {
+        tableViewModel.savedTable.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progress.visibility = View.GONE
+                    val tablesList: List<Table> = it.value
                     val tablesRv = binding.tablesRv
                     tablesRv.adapter = tablesRVAdapter
                     tablesRVAdapter.submitList(tablesList)
@@ -70,7 +91,8 @@ class TableFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    binding.progress.visibility = View.VISIBLE                }
+                    binding.progress.visibility = View.VISIBLE
+                }
             }
         }
     }

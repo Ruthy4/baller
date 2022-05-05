@@ -45,7 +45,9 @@ class TeamFragment : Fragment() {
 
         val intent = activity?.intent
         val competitionId = intent?.getIntExtra("competitionId", 0)
-        teamViewModel.getCompetitions(competitionId)
+        teamViewModel.getTeamListFromDatabase()
+
+        observeSavedTeams()
         observeTeams()
 
         // implement swipe to refresh
@@ -61,9 +63,7 @@ class TeamFragment : Fragment() {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
                     val teamsList: List<Team>? = it.value.teams
-                    val teamsRv = binding.teamsRv
-                    teamsRv.adapter = teamAdapter
-                    teamAdapter.submitList(teamsList)
+                    teamViewModel.saveTeam(teamsList)
                 }
 
                 is Resource.Error -> {
@@ -73,6 +73,29 @@ class TeamFragment : Fragment() {
 
                 is Resource.Loading -> {
                     binding.progress.visibility = View.VISIBLE               }
+            }
+        }
+    }
+
+    private fun observeSavedTeams() {
+        teamViewModel.savedTeam.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progress.visibility = View.GONE
+                    val teamsList: List<Team> = it.value
+                    val teamsRv = binding.teamsRv
+                    teamsRv.adapter = teamAdapter
+                    teamAdapter.submitList(teamsList)
+                }
+
+                is Resource.Error -> {
+                    binding.progress.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Error Reading from database", Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Loading -> {
+                    binding.progress.visibility = View.VISIBLE
+                }
             }
         }
     }

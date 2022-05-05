@@ -24,6 +24,8 @@ class SquadActivity : AppCompatActivity() {
         binding = ActivitySquadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        observeSavedSquadFromDatabase()
+
         squadAdapter = SquadAdapter()
         val intent = intent
         val teamId = intent?.getIntExtra("teamId", 0)
@@ -38,6 +40,7 @@ class SquadActivity : AppCompatActivity() {
             .into(binding.imgTeamLogo)
 
         squadViewModel.getTeamForSquad(teamId)
+        squadViewModel.getTeamsSquadFromDatabase()
         observeSquadResponse()
 
         // implement swipe to refresh
@@ -54,6 +57,27 @@ class SquadActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
                     val tablesList: List<Squad>? = it.value.squad
+                    squadViewModel.saveTeamsSquadToDatabase(tablesList)
+                }
+
+                is Resource.Error -> {
+                    binding.progress.visibility = View.GONE
+                    Toast.makeText(this, "An Error occured", Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Loading -> {
+                    binding.progress.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun observeSavedSquadFromDatabase() {
+        squadViewModel.savedSquad.observe(this) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.progress.visibility = View.GONE
+                    val tablesList: List<Squad> = it.value
                     val squadRv = binding.squadRv
                     squadRv.adapter = squadAdapter
                     squadAdapter.submitList(tablesList)
@@ -61,7 +85,7 @@ class SquadActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(this, "An Error occured", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error reading from Database", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {

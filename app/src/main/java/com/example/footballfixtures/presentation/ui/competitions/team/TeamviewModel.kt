@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.footballfixtures.data.remote.dto.Competition
 import com.example.footballfixtures.data.remote.dto.CompetitionResponse
+import com.example.footballfixtures.data.remote.dto.Team
 import com.example.footballfixtures.data.remote.dto.TeamResponse
 import com.example.footballfixtures.domain.repository.FootballFixturesRepository
 import com.example.footballfixtures.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +20,9 @@ import javax.inject.Inject
 class TeamViewModel @Inject constructor(private val repository: FootballFixturesRepository): ViewModel() {
     private var _team = MutableLiveData<Resource<TeamResponse>>()
     val team: LiveData<Resource<TeamResponse>> get() = _team
+
+    private var _savedTeam = MutableLiveData<Resource<List<Team>>>()
+    val savedTeam: LiveData<Resource<List<Team>>> get() = _savedTeam
 
     fun getCompetitions(competitionId: Int?) {
         _team.value = Resource.Loading(null, "Loading....")
@@ -26,6 +32,25 @@ class TeamViewModel @Inject constructor(private val repository: FootballFixtures
                 _team.postValue(getTeam)
             } catch (e: Exception) {
                 e.message
+            }
+        }
+    }
+
+    fun saveTeam(team: List<Team>?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.saveTeam(team)
+            } catch (e: Exception) {
+                e.message
+            }
+        }
+    }
+
+    fun getTeamListFromDatabase() {
+        _savedTeam.value = Resource.Loading(null, "Loading....")
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getTeamListFromDatabase().collect {
+                _savedTeam.postValue(it)
             }
         }
     }

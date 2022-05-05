@@ -38,8 +38,7 @@ class CompetitionFragmentTest {
 
     @Test
     fun test_isCompetitionsFragmentVisible_onAppLaunch() {
-        Espresso.onView(ViewMatchers.withId(R.id.competitions_rv))
+        onView(withId(R.id.competitions_rv))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
-
 }
