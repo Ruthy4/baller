@@ -18,7 +18,9 @@ class FootballFixturesRepositoryImpl @Inject constructor(
 
 
     override suspend fun getAllCompetitions(): Resource<CompetitionResponse> {
-        return apiCall { api.getAllCompetitions() }
+        return apiCall { api.getAllCompetitions()
+
+        }
     }
 
 
@@ -32,6 +34,10 @@ class FootballFixturesRepositoryImpl @Inject constructor(
 
     override suspend fun getFixturesForCompetition(competitionId: Int?): Resource<FixturesResponse> {
         return apiCall { api.getFixturesForCompetition(competitionId) }
+    }
+
+    override suspend fun getTodaysFixtures(): Resource<TodaysFixturesResponse> {
+        return apiCall { api.getTodaysFixtures() }
     }
 
     override suspend fun getSquadForTeam(teamId: Int?): Resource<SquadResponse> {
@@ -58,9 +64,9 @@ class FootballFixturesRepositoryImpl @Inject constructor(
         dao.saveCompetitionTable(table)
     }
 
-    override suspend fun getTableListFromDatabase(): Flow<Resource<List<Table>>> {
+    override suspend fun getTableListFromDatabase(competitionId: Int?): Flow<Resource<List<Table>>> {
         return flow {
-            dao.getTableListFromDatabase().collect {
+            dao.getTableListFromDatabase(competitionId).collect {
                 emit(Resource.Success(it))
             }
         }
@@ -70,9 +76,9 @@ class FootballFixturesRepositoryImpl @Inject constructor(
         dao.saveTeam(team)
     }
 
-    override suspend fun getTeamListFromDatabase(): Flow<Resource<List<Team>>> {
+    override suspend fun getTeamListFromDatabase(competitionId: Int?): Flow<Resource<List<Team>>> {
         return flow {
-            dao.getTeamListFromDatabase().collect {
+            dao.getTeamListFromDatabase(competitionId).collect {
                 emit(Resource.Success(it))
             }
         }
@@ -82,9 +88,21 @@ class FootballFixturesRepositoryImpl @Inject constructor(
         dao.saveFixtures(matches)
     }
 
-    override suspend fun getFixturesListFromDatabase(): Flow<Resource<List<Match>>> {
+    override suspend fun getFixturesListFromDatabase(competitionId: Int?): Flow<Resource<List<Match>>> {
         return flow {
-            dao.getFixturesListFromDatabase().collect {
+            dao.getFixturesListFromDatabase(competitionId).collect {
+                emit(Resource.Success(it))
+            }
+        }
+    }
+
+    override suspend fun saveTodayFixtures(matches: List<Match>?) {
+        dao.saveTodayFixtures(matches)
+    }
+
+    override suspend fun getTodayFixturesListFromDatabase(): Flow<Resource<List<Match>>> {
+        return flow {
+            dao.getTodayFixturesListFromDatabase().collect {
                 emit(Resource.Success(it))
             }
         }
@@ -94,9 +112,9 @@ class FootballFixturesRepositoryImpl @Inject constructor(
         dao.saveTeamsSquad(squad)
     }
 
-    override suspend fun getTeamsSquadFromDatabase(): Flow<Resource<List<Squad>>> {
+    override suspend fun getTeamsSquadFromDatabase(teamId: Int?): Flow<Resource<List<Squad>>> {
         return flow {
-            dao.getTeamsSquadListFromDatabase().collect {
+            dao.getTeamsSquadListFromDatabase(teamId).collect {
                 emit(Resource.Success(it))
             }
         }

@@ -45,10 +45,10 @@ class TableViewModel @Inject constructor(private val repository: FootballFixture
         }
     }
 
-    fun getTableListFromDatabase() {
+    fun getTableListFromDatabase(competitionId: Int?) {
         _savedTable.value = Resource.Loading(null, "Loading....")
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getTableListFromDatabase ().collect {
+            repository.getTableListFromDatabase (competitionId).collect {
                 _savedTable.postValue(it)
             }
         }

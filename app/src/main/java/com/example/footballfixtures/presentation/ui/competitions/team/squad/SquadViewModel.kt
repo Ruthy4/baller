@@ -45,10 +45,10 @@ class SquadViewModel @Inject constructor(private val repository: FootballFixture
         }
     }
 
-    fun getTeamsSquadFromDatabase() {
+    fun getTeamsSquadFromDatabase(teamId: Int?) {
         _savedSquad.value = Resource.Loading(null, "Loading....")
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getTeamsSquadFromDatabase().collect {
+            repository.getTeamsSquadFromDatabase(teamId).collect {
                 _savedSquad.postValue(it)
             }
         }

@@ -29,6 +29,7 @@ interface FootballAPI {
     @Headers("X-Auth-Token: $TOKEN")
     suspend fun getSquadForTeam(@Path("teamId") teamId: Int?): SquadResponse
 
-    @GET("matches?dateFrom=2022-05-01&dateTo=2022-05-15")
-    suspend fun getTodaysFixtures():List<Match>
+    @GET("matches?dateFrom=2022-05-05&dateTo=2022-05-15")
+    @Headers("X-Auth-Token: $TOKEN")
+    suspend fun getTodaysFixtures(): TodaysFixturesResponse
 }

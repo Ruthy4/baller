@@ -33,7 +33,8 @@ class FixturesFragment : Fragment() {
 
         val intent = activity?.intent
         val competitionId = intent?.getIntExtra("competitionId", 0)
-        fixturesViewModel.getFixturesListFromDatabase()
+        fixturesViewModel.getFixtures(competitionId)
+        fixturesViewModel.getFixturesListFromDatabase(competitionId)
 
         fixturesAdapter = FixturesAdapter()
         observeFixtures()
@@ -57,7 +58,7 @@ class FixturesFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "An Error occurred", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {

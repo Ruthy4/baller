@@ -13,6 +13,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="md_text">MD: 35</string>
     <string name="score_text">00</string>
+    <string name="today_s_fixtures">Today\'s Fixtures</string>
     <string-array name="viewPager">
         <item>Table</item>
         <item>Fixtures</item>

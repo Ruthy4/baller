@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-@Entity
+@Entity(tableName = "table")
 @TypeConverters(TableTypeConverters::class)
 data class Table(
     @SerializedName("competitionId") var competitionId: Int?,

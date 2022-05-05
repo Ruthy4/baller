@@ -45,7 +45,8 @@ class TeamFragment : Fragment() {
 
         val intent = activity?.intent
         val competitionId = intent?.getIntExtra("competitionId", 0)
-        teamViewModel.getTeamListFromDatabase()
+        teamViewModel.getCompetitions(competitionId)
+        teamViewModel.getTeamListFromDatabase(competitionId)
 
         observeSavedTeams()
         observeTeams()
@@ -63,7 +64,9 @@ class TeamFragment : Fragment() {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
                     val teamsList: List<Team>? = it.value.teams
-                    teamViewModel.saveTeam(teamsList)
+
+                   val savedTeam = teamViewModel.saveTeam(teamsList)
+                    Toast.makeText(requireContext(), "$savedTeam", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Error -> {
@@ -90,12 +93,11 @@ class TeamFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Error Reading from database", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "An Error occured", Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Loading -> {
-                    binding.progress.visibility = View.VISIBLE
-                }
+                    binding.progress.visibility = View.VISIBLE               }
             }
         }
     }

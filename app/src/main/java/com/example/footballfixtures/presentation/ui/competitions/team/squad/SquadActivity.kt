@@ -40,7 +40,8 @@ class SquadActivity : AppCompatActivity() {
             .into(binding.imgTeamLogo)
 
         squadViewModel.getTeamForSquad(teamId)
-        squadViewModel.getTeamsSquadFromDatabase()
+        squadViewModel.getTeamsSquadFromDatabase(teamId)
+        Toast.makeText(this, "${squadViewModel.savedSquad.value}", Toast.LENGTH_SHORT).show()
         observeSquadResponse()
 
         // implement swipe to refresh

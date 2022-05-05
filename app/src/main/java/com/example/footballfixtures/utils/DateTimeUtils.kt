@@ -27,16 +27,6 @@ object DateTimeUtils {
         }
     }
 
-    fun toTimeStampRelative(date: String): CharSequence? {
-        return DateUtils.getRelativeTimeSpanString(
-            SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss'Z'",
-                Locale.getDefault()
-            ).parse(date).time
-        )
-    }
-
-
     fun formatTime(time: String?): String? {
         try {
             return SimpleDateFormat("HH:mm", Locale.getDefault())

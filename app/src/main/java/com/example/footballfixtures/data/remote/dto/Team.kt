@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-@Entity
+@Entity(tableName = "team")
 data class Team(
     @SerializedName("competitionId") var competitionId: Int?,
     @SerializedName("id") @PrimaryKey(autoGenerate = false) val id: Int,

@@ -18,7 +18,7 @@ class FixturesAdapter: ListAdapter<Match, FixturesAdapter.ViewHolder>(DiffCallba
         fun bind(match: Match) {
             binding.apply {
                 tvMd.text = root.context.getString(R.string.md_text)
-                tvScore.text =root.context.getString(R.string.md_text)
+                tvScore.text = root.context.getString(R.string.score_text)
                 tvScoreAway.text = resolveAwayScore(match.score)
                 tvScoreHome.text = resolveHomeScore(match.score)
                 tvStatus.text = match.status

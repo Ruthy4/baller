@@ -28,3 +28,4 @@ data class Match(
 
 data class FixturesResponse(@SerializedName("matches") val matches: List<Match>)
 
+data class TodaysFixturesResponse(@SerializedName("matches") val matches: List<Match>)

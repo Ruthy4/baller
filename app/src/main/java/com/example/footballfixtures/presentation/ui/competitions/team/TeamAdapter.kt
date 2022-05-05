@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.footballfixtures.R
 import com.example.footballfixtures.data.remote.dto.Team
 import com.example.footballfixtures.databinding.TeamRvItemBinding
 
@@ -18,6 +19,7 @@ class TeamAdapter(private val onItemClick: (Team) -> Unit) :
             binding.apply {
                 Glide.with(binding.root.context)
                     .load(team.crestUrl)
+                    .placeholder(R.drawable.ic_soccer)
                     .into(imgTeamLogo)
 
                 tvTeamName.text = team.name

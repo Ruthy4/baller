@@ -23,26 +23,33 @@ interface FootballFixturesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveCompetitionTable(table: List<Table>?)
 
-    @Query("SELECT * FROM `Table`")
-    fun getTableListFromDatabase(): Flow<List<Table>>
+    @Query("SELECT * FROM `table` WHERE competitionId =:competitionId ORDER BY position ASC")
+    fun getTableListFromDatabase(competitionId: Int?): Flow<List<Table>>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveTeam(table: List<Team>?)
 
-    @Query("SELECT * FROM `Team`")
-    fun getTeamListFromDatabase(): Flow<List<Team>>
+    @Query("SELECT * FROM `team` WHERE competitionId=:competitionId ORDER BY name ASC")
+    fun getTeamListFromDatabase(competitionId: Int?): Flow<List<Team>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveFixtures(matches: List<Match>?)
 
-    @Query("SELECT * FROM `Match`")
-    fun getFixturesListFromDatabase(): Flow<List<Match>>
+    @Query("SELECT * FROM `match` WHERE competitionId=:competitionId  ORDER BY date DESC")
+    fun getFixturesListFromDatabase(competitionId: Int?): Flow<List<Match>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveTodayFixtures(matches: List<Match>?)
+
+    @Query("SELECT * FROM `match`")
+    fun getTodayFixturesListFromDatabase(): Flow<List<Match>>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveTeamsSquad(matches: List<Squad>?)
 
-    @Query("SELECT * FROM `Squad`")
-    fun getTeamsSquadListFromDatabase(): Flow<List<Squad>>
+    @Query("SELECT * FROM `team` WHERE competitionId=:competitionId  ORDER BY name ASC")
+    fun getTeamsSquadListFromDatabase(competitionId: Int?): Flow<List<Squad>>
 
 }

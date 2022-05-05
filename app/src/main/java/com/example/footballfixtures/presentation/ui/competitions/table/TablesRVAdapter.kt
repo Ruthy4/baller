@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.footballfixtures.R
 import com.example.footballfixtures.data.remote.dto.Table
 import com.example.footballfixtures.databinding.TablesRvItemBinding
 
@@ -22,6 +23,7 @@ class TablesRVAdapter() : ListAdapter<Table, TablesRVAdapter.ViewHolder>(DiffCal
 
                 Glide.with(binding.root.context)
                     .load(table.team.crestUrl)
+                    .placeholder(R.drawable.ic_soccer)
                     .into(imgTeamLogo)
             }
         }

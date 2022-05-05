@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FootballFixtures">
         <activity
+            android:name=".presentation.ui.competitions.fixtures.TodaysFixturesActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.competitions.team.squad.SquadActivity"
             android:exported="false" />
         <activity

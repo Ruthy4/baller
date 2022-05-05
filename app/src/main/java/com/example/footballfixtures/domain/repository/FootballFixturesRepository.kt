@@ -13,6 +13,8 @@ interface FootballFixturesRepository {
 
     suspend fun getFixturesForCompetition(competitionId: Int?): Resource<FixturesResponse>
 
+    suspend fun getTodaysFixtures(): Resource<TodaysFixturesResponse>
+
     suspend fun getSquadForTeam(teamId: Int?): Resource<SquadResponse>
 
     suspend fun saveCompetitions(competition: List<Competition>?)
@@ -23,17 +25,21 @@ interface FootballFixturesRepository {
 
     suspend fun saveCompetitionTable(table: List<Table>?)
 
-    suspend fun getTableListFromDatabase(): Flow<Resource<List<Table>>>
+    suspend fun getTableListFromDatabase(competitionId: Int?): Flow<Resource<List<Table>>>
 
     suspend fun saveTeam(team: List<Team>?)
 
-    suspend fun getTeamListFromDatabase(): Flow<Resource<List<Team>>>
+    suspend fun getTeamListFromDatabase(competitionId: Int?): Flow<Resource<List<Team>>>
 
     suspend fun saveFixtures(matches: List<Match>?)
 
-    suspend fun getFixturesListFromDatabase() : Flow<Resource<List<Match>>>
+    suspend fun getFixturesListFromDatabase(competitionId: Int?) : Flow<Resource<List<Match>>>
+
+    suspend fun saveTodayFixtures(matches: List<Match>?)
+
+    suspend fun getTodayFixturesListFromDatabase() : Flow<Resource<List<Match>>>
 
     suspend fun saveTeamsSquad(squad: List<Squad>?)
 
-    suspend fun getTeamsSquadFromDatabase() : Flow<Resource<List<Squad>>>
+    suspend fun getTeamsSquadFromDatabase(teamId: Int?) : Flow<Resource<List<Squad>>>
 }

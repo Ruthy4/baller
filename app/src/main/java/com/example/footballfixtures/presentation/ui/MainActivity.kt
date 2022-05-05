@@ -1,5 +1,6 @@
 package com.example.footballfixtures.presentation.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -10,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.footballfixtures.R
 import com.example.footballfixtures.databinding.ActivityMainBinding
 import com.example.footballfixtures.presentation.ui.competitions.CompetitionsViewModel
+import com.example.footballfixtures.presentation.ui.competitions.fixtures.TodaysFixturesActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,8 +34,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val intent = Intent(this, TodaysFixturesActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -46,10 +46,10 @@ class FixturesViewModel @Inject constructor(private val repository: FootballFixt
         }
     }
 
-    fun getFixturesListFromDatabase() {
+    fun getFixturesListFromDatabase(competitionId: Int?) {
         _savedFixtures.value = Resource.Loading(null, "Loading....")
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getFixturesListFromDatabase().collect {
+            repository.getFixturesListFromDatabase(competitionId).collect {
                 _savedFixtures.postValue(it)
             }
         }
