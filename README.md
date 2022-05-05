@@ -7,8 +7,14 @@ Football Fixtures is app that consumes fixtures data from https://www.football-d
 
 
 # ScreenShots
-<img width="313" alt="image" src="https://user-images.githubusercontent.com/33810711/166926415-efcc856b-c9cb-45ce-b008-3cca461a885c.png">
 
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/33810711/166926415-efcc856b-c9cb-45ce-b008-3cca461a885c.png" width="313" />
+  <img src="https://user-images.githubusercontent.com/33810711/167015942-c18283c5-f865-481c-b91f-12fcae76c92b.png" width="321" /> 
+  <img src="https://user-images.githubusercontent.com/33810711/167016028-98967162-b12a-4ea2-bf86-2978c4fcadf5.png" width="315" />
+  <img src="https://user-images.githubusercontent.com/33810711/167016128-bf4dd249-555f-469a-b4c4-b666d920d467.png" width="325" /> 
+  <img src="https://user-images.githubusercontent.com/33810711/167016241-347a0a51-e473-4510-b4af-3a88508568c7.png" width="325" />
+</p>
 
 
 # Features
