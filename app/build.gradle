@@ -17,7 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.example.footballfixtures.HiltTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -98,6 +98,8 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$versions.core_testing_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines_version"
     androidTestImplementation "com.google.truth:truth:$versions.truth_version"
+    implementation "androidx.test:runner:1.4.0"
+    implementation "androidx.test:rules:1.4.0"
 
     //timber
     implementation "com.jakewharton.timber:timber:$versions.timber_version"

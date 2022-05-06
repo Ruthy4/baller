@@ -23,7 +23,6 @@ class FootballFixturesRepositoryImpl @Inject constructor(
         }
     }
 
-
     override suspend fun getTableForCompetition(competitionId: Int?): Resource<TableResponse> {
         return apiCall { api.getTableForCompetition(competitionId) }
     }

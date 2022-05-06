@@ -49,7 +49,7 @@ suspend fun <T> apiCall(dispatcher: CoroutineContext = Dispatchers.IO,
                 is IOException ->
                     Resource.Error(103, "Not connected to the internet")
                 else -> {
-                    Resource.Error(429, "Limit Exceeded, wait awhile")
+                    Resource.Error(null, "Limit Exceeded, wait awhile")
                 }
             }
         }

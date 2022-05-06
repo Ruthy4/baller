@@ -26,20 +26,6 @@ object FakeDbData {
         return list
     }
 
-    fun getFakeMatch(): Match {
-        return Match(
-            1,
-            Competition(1, "Competition$1"),
-            0,
-            DateTimeUtils.formatDate(Date()),
-            "Status $1",
-            "",
-            null,
-            null,
-            null,
-            null
-        )
-    }
 
     fun getCompetitions(size: Int): MutableList<Competition> {
         val list = mutableListOf<Competition>()
