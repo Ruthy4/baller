@@ -15,6 +15,7 @@ import com.example.footballfixtures.databinding.FragmentCompetitionsBinding
 import com.example.footballfixtures.presentation.ui.competitions.competitiondetail.CompetitionsDetailActivity
 import com.example.footballfixtures.presentation.ui.competitions.table.TableViewModel
 import com.example.footballfixtures.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -70,11 +71,8 @@ class CompetitionsFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        "An Error occured, Swipe to refresh",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.competitionsRv, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
 
                 is Resource.Loading -> {
@@ -97,11 +95,8 @@ class CompetitionsFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        "An Error occured, Swipe to refresh",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.competitionsRv, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
 
                 is Resource.Loading -> {

@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.footballfixtures.data.mappers.TableDomainMapper
 import com.example.footballfixtures.data.remote.dto.Table
-import com.example.footballfixtures.data.remote.dto.Team
 import com.example.footballfixtures.databinding.FragmentTableBinding
 import com.example.footballfixtures.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,8 +39,6 @@ class TableFragment : Fragment() {
         val intent = activity?.intent
         competitionId = intent?.getIntExtra("competitionId", 0)
 
-        Log.d("MAIN_COMPETITION", "onViewCreated: $competitionId")
-
         tableViewModel.getCompetitionTables(competitionId)
         tableViewModel.getTableListFromDatabase(competitionId)
 
@@ -48,11 +47,11 @@ class TableFragment : Fragment() {
         observeTableFromDatabase()
         observeTableResponse()
 
-        // implement swipe to refresh
-        binding.competitionFragmentSwipeRefreshLayout.setOnRefreshListener {
-            tableViewModel.getCompetitionTables(competitionId)
-            binding.competitionFragmentSwipeRefreshLayout.isRefreshing = false
-        }
+//        // implement swipe to refresh
+//        binding.competitionFragmentSwipeRefreshLayout.setOnRefreshListener {
+//            tableViewModel.getCompetitionTables(competitionId)
+//            binding.competitionFragmentSwipeRefreshLayout.isRefreshing = false
+//        }
     }
 
 
@@ -62,49 +61,15 @@ class TableFragment : Fragment() {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
                     val tableResponse = it.value.standings?.get(0)?.table
-                    val tableDomain = tableResponse?.map { tableResponse ->
-                        val teamDomain = Team(
-                            competitionId = competitionId,
-                            id = tableResponse.team.id,
-                            name = tableResponse.team.name,
-                            crestUrl = tableResponse.team.crestUrl,
-                            shortName = tableResponse.team.shortName,
-                            tla = tableResponse.team.tla
-                        )
-                        Table(
-                            competitionId = competitionId,
-                            id = tableResponse.id,
-                            position = tableResponse.position,
-                            team = teamDomain,
-                            playedGames = tableResponse.playedGames,
-                            won = tableResponse.won,
-                            draw = tableResponse.draw,
-                            lost = tableResponse.lost,
-                            points = tableResponse.points,
-                            goalsFor = tableResponse.goalsFor,
-                            goalsAgainst = tableResponse.goalsAgainst,
-                            goalDifference = tableResponse.goalDifference
-                        )
-                    }
 
-                    Log.d(
-                        "COMPETITION",
-                        "observeTableResponse:${tableDomain}"
-                    )
-
-                    tableViewModel.saveCompetitionTable(tableDomain)
-                    Toast.makeText(
-                        requireContext(),
-                        "${tableViewModel.savedTable.value}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                    tableViewModel.saveCompetitionTable((
+                            TableDomainMapper(tableResponse,competitionId)).tableDomain)
                 }
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "No internet", Toast.LENGTH_SHORT).show()
-                }
+                    Snackbar.make(binding.tablesRv, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()                }
 
                 is Resource.Loading -> {
                     binding.progress.visibility = View.VISIBLE
@@ -126,11 +91,7 @@ class TableFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        "Error reading from database",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.tablesRv, it.error, Snackbar.LENGTH_LONG).show()
                 }
 
                 is Resource.Loading -> {

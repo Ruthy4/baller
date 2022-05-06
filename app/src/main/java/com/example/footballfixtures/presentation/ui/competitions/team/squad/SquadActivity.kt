@@ -7,11 +7,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.example.footballfixtures.R
+import com.example.footballfixtures.data.mappers.SquadDomainMapper
 import com.example.footballfixtures.data.remote.dto.Squad
 import com.example.footballfixtures.data.remote.dto.Table
 import com.example.footballfixtures.databinding.ActivityCompetitionsDetailBinding
 import com.example.footballfixtures.databinding.ActivitySquadBinding
 import com.example.footballfixtures.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +21,7 @@ class SquadActivity : AppCompatActivity() {
     lateinit var binding: ActivitySquadBinding
     private val squadViewModel: SquadViewModel by viewModels()
     lateinit var squadAdapter: SquadAdapter
+    private var teamId: Int? = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySquadBinding.inflate(layoutInflater)
@@ -28,7 +31,7 @@ class SquadActivity : AppCompatActivity() {
 
         squadAdapter = SquadAdapter()
         val intent = intent
-        val teamId = intent?.getIntExtra("teamId", 0)
+        teamId = intent?.getIntExtra("teamId", 0)
         val teamLogo = intent?.getStringExtra("teamLogo")
         val teamTitle = intent?.getStringExtra("teamName")
 
@@ -41,8 +44,6 @@ class SquadActivity : AppCompatActivity() {
 
         squadViewModel.getTeamForSquad(teamId)
         squadViewModel.getTeamsSquadFromDatabase(teamId)
-        Toast.makeText(this, "${squadViewModel.savedSquad.value}", Toast.LENGTH_SHORT).show()
-        observeSquadResponse()
 
         // implement swipe to refresh
         binding.competitionFragmentSwipeRefreshLayout.setOnRefreshListener {
@@ -58,12 +59,18 @@ class SquadActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
                     val tablesList: List<Squad>? = it.value.squad
-                    squadViewModel.saveTeamsSquadToDatabase(tablesList)
+                    squadViewModel.saveTeamsSquadToDatabase(
+                        (SquadDomainMapper(
+                            tablesList,
+                            teamId
+                        )).squadDomain
+                    )
                 }
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(this, "An Error occured", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.appbarLayout, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
 
                 is Resource.Loading -> {
@@ -73,12 +80,13 @@ class SquadActivity : AppCompatActivity() {
         }
     }
 
+    // read from room database
     private fun observeSavedSquadFromDatabase() {
-        squadViewModel.savedSquad.observe(this) {
+        squadViewModel.squad.observe(this) {
             when (it) {
                 is Resource.Success -> {
                     binding.progress.visibility = View.GONE
-                    val tablesList: List<Squad> = it.value
+                    val tablesList: List<Squad>? = it.value.squad
                     val squadRv = binding.squadRv
                     squadRv.adapter = squadAdapter
                     squadAdapter.submitList(tablesList)
@@ -86,7 +94,8 @@ class SquadActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(this, "Error reading from Database", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.appbarLayout, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
 
                 is Resource.Loading -> {

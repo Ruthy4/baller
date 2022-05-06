@@ -14,9 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CompetitionsDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityCompetitionsDetailBinding
-    private val tableViewModel: TableViewModel by viewModels()
-    private val teamViewModel: TeamViewModel by viewModels()
-    private val fixturesViewModel: FixturesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +25,6 @@ class CompetitionsDetailActivity : AppCompatActivity() {
         val competitionId = competitionIntent.getIntExtra("competitionId", 0)
         binding.tvTitle.text = competitionName
 
-        // get competition details
-        tableViewModel.getCompetitionTables(competitionId)
-        teamViewModel.getCompetitions(competitionId)
-        fixturesViewModel.getFixtures(competitionId)
 
         val viewPager = binding.viewpager
         val tabLayout = binding.tabLayout

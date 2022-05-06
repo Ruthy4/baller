@@ -1,6 +1,9 @@
 package com.example.footballfixtures.utils
 
+import android.os.Build
+import android.os.LimitExceededException
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +15,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import kotlin.coroutines.CoroutineContext
 
+@RequiresApi(Build.VERSION_CODES.R)
 suspend fun <T> apiCall(dispatcher: CoroutineContext = Dispatchers.IO,
                         apiCall: suspend () -> T) : Resource<T> {
     return withContext(dispatcher) {
@@ -38,7 +42,6 @@ suspend fun <T> apiCall(dispatcher: CoroutineContext = Dispatchers.IO,
                     } catch (exception: Exception){
                         Resource.Error(401, "An error occurred on the server")
                     }
-
                 }
                 is InternalError ->
                     Resource.Error(500, "An internal server error occurred")
@@ -46,7 +49,7 @@ suspend fun <T> apiCall(dispatcher: CoroutineContext = Dispatchers.IO,
                 is IOException ->
                     Resource.Error(103, "Not connected to the internet")
                 else -> {
-                    Resource.Error(null, throwable.localizedMessage)
+                    Resource.Error(429, "Limit Exceeded, wait awhile")
                 }
             }
         }

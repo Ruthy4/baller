@@ -36,7 +36,7 @@ interface FootballFixturesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveFixtures(matches: List<Match>?)
 
-    @Query("SELECT * FROM `match` WHERE competitionId=:competitionId  ORDER BY date DESC")
+    @Query("SELECT * FROM `match` WHERE competitionId=:competitionId  ORDER BY date ASC")
     fun getFixturesListFromDatabase(competitionId: Int?): Flow<List<Match>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

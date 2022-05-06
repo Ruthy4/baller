@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.footballfixtures.R
+import com.example.footballfixtures.data.mappers.TeamDomainMapper
 import com.example.footballfixtures.data.remote.dto.Team
 import com.example.footballfixtures.databinding.FragmentTeamBinding
 import com.example.footballfixtures.presentation.ui.competitions.competitiondetail.CompetitionsDetailActivity
 import com.example.footballfixtures.presentation.ui.competitions.team.squad.SquadActivity
 import com.example.footballfixtures.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,6 +25,7 @@ class TeamFragment : Fragment() {
     private val binding get() = _binding!!
     private val teamViewModel: TeamViewModel by viewModels()
     lateinit var teamAdapter: TeamAdapter
+    private var competitionId: Int? = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +47,7 @@ class TeamFragment : Fragment() {
         }
 
         val intent = activity?.intent
-        val competitionId = intent?.getIntExtra("competitionId", 0)
+        competitionId = intent?.getIntExtra("competitionId", 0)
         teamViewModel.getCompetitions(competitionId)
         teamViewModel.getTeamListFromDatabase(competitionId)
 
@@ -58,6 +61,7 @@ class TeamFragment : Fragment() {
         }
     }
 
+    // save to room database
     private fun observeTeams() {
         teamViewModel.team.observe(viewLifecycleOwner) {
             when (it) {
@@ -65,13 +69,13 @@ class TeamFragment : Fragment() {
                     binding.progress.visibility = View.GONE
                     val teamsList: List<Team>? = it.value.teams
 
-                   val savedTeam = teamViewModel.saveTeam(teamsList)
-                    Toast.makeText(requireContext(), "$savedTeam", Toast.LENGTH_SHORT).show()
+                   teamViewModel.saveTeam((TeamDomainMapper(teamsList,competitionId)).teamDomain)
                 }
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "An Error occured", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.teamsRv, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
 
                 is Resource.Loading -> {
@@ -80,6 +84,7 @@ class TeamFragment : Fragment() {
         }
     }
 
+    // read from room database
     private fun observeSavedTeams() {
         teamViewModel.savedTeam.observe(viewLifecycleOwner) {
             when (it) {
@@ -93,7 +98,8 @@ class TeamFragment : Fragment() {
 
                 is Resource.Error -> {
                     binding.progress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "An Error occured", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.teamsRv, it.error, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 }
 
                 is Resource.Loading -> {
