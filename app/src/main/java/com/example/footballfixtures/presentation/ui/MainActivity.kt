@@ -12,6 +12,7 @@ import com.example.footballfixtures.R
 import com.example.footballfixtures.databinding.ActivityMainBinding
 import com.example.footballfixtures.presentation.ui.competitions.CompetitionsViewModel
 import com.example.footballfixtures.presentation.ui.competitions.fixtures.TodaysFixturesActivity
+import com.example.textbooksandjournals.utils.ConnectivityLiveData
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,10 +20,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    lateinit var connectionLiveData : ConnectivityLiveData
+
     val viewModel: CompetitionsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling the function that checks for connectivity and saving it to a variable
+        connectionLiveData = ConnectivityLiveData(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

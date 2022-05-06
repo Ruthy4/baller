@@ -1,6 +1,5 @@
 package com.example.textbooksandjournals.utils
 
-import android.util.Log
 import timber.log.Timber
 import java.io.IOException
 import java.net.InetSocketAddress

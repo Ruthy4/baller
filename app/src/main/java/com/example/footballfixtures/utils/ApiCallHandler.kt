@@ -1,12 +1,10 @@
 package com.example.footballfixtures.utils
 
 import android.os.Build
-import android.os.LimitExceededException
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import kotlinx.android.parcel.Parcelize
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
